@@ -5,7 +5,7 @@ export class NewsItem extends Component {
     let { title, description, imageurl, newsurl } = this.props;
     return (
       <div className=" my-3">
-        <div className="card" style={{ width: "18rem" }}>
+        <div className="card" style={{ maxWidth: "18rem" ,height:"25rem"}}>
           {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
           <img
             className="card-img-top"
@@ -17,10 +17,9 @@ export class NewsItem extends Component {
             style={{ objectFit: 'cover', height: '200px' }}
             alt="Nothing"
           />
-          <div className="card-body bg-dark "
-          style={{color: "white"}}>
+          <div className="card-body bg-dark text-white">
             <h5 className="card-title">{title}</h5>
-            <p className="card-text">{description}</p>
+            <p className="card-text">{!description?"Click below to read more...":description}</p>
             <a
               href={newsurl}
               rel="noreferrer"
