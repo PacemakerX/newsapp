@@ -2,24 +2,49 @@ import React, { Component } from "react";
 import NewsItem from "./NewsItem";
 
 export class News extends Component {
-  articles = [];
-
   constructor() {
     super();
     this.state = {
-      articles: this.articles,
+      articles: [],
       loading: false,
+      page: 1,
     };
   }
 
   async componentDidMount() {
     let url =
-      "https://newsapi.org/v2/top-headlines?country=in&apiKey=2050bf7ab6ce4e05bc3af4823f553349";
+      "https://newsapi.org/v2/top-headlines?country=in&apiKey=2050bf7ab6ce4e05bc3af4823f553349&pageSize=9&page-1";
     let data = await fetch(url);
     let parsedData = await data.json();
 
-    this.setState({ articles: parsedData.articles });
+    console.log(parsedData);
+
+    this.setState({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+    });
   }
+
+  handlePrevClick = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=2050bf7ab6ce4e05bc3af4823f553349&pageSize=9&page-${
+      this.state.page - 1
+    }`;
+    let data = await fetch(url);
+    let parsedData = await data.json();
+
+    this.setState({ page: this.state.page - 1, articles: parsedData.articles });
+  };
+
+  handleNextClick = async () => {
+    console.log("next");
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=2050bf7ab6ce4e05bc3af4823f553349&pageSize=9&page-${
+      this.state.page + 1
+    }`;
+    let data = await fetch(url);
+    let parsedData = await data.json();
+
+    this.setState({ page: this.state.page + 1, articles: parsedData.articles });
+  };
   render() {
     return (
       <div className="container my-3">
@@ -49,6 +74,23 @@ export class News extends Component {
               </div>
             );
           })}
+        </div>
+        <div className="d-flex justify-content-between container">
+          <button
+            disabled={this.state.page <= 1}
+            type="button"
+            class="btn btn-primary my-2 "
+            onClick={this.handlePrevClick}
+          >
+            &larr; Previous
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary my-2 "
+            onClick={this.handleNextClick}
+          >
+            Next &rarr;
+          </button>
         </div>
       </div>
     );
