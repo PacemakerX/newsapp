@@ -82,14 +82,14 @@ export class News extends Component {
           <button
             disabled={this.state.page <= 1}
             type="button"
-            class="btn btn-primary my-2 "
+            className="btn btn-primary my-2 "
             onClick={this.handlePrevClick}
           >
             &larr; Previous
           </button>
           <button
             type="button"
-            class="btn btn-primary my-2 "
+            className="btn btn-primary my-2 "
             onClick={this.handleNextClick}
           >
             Next &rarr;
