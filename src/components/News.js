@@ -17,7 +17,6 @@ export class News extends Component {
     let data = await fetch(url);
     let parsedData = await data.json();
 
-    console.log(parsedData);
 
     this.setState({
       articles: parsedData.articles,
@@ -36,7 +35,10 @@ export class News extends Component {
   };
 
   handleNextClick = async () => {
-    console.log("next");
+
+    if(this.state.page===Math.ceil(this.state.totalResults/9)){}
+    
+    else{
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=2050bf7ab6ce4e05bc3af4823f553349&pageSize=9&page=${
       this.state.page + 1
     }`;
@@ -44,6 +46,7 @@ export class News extends Component {
     let parsedData = await data.json();
 
     this.setState({ page: this.state.page + 1, articles: parsedData.articles });
+  }
   };
   render() {
     return (
