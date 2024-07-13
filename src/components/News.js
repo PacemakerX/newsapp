@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
+import Spinner from "./Spinner";
 
 export class News extends Component {
   constructor() {
@@ -12,6 +13,7 @@ export class News extends Component {
   }
 
   async componentDidMount() {
+    this.setState({loading:true})
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.props.apiKey}&pageSize=${this.props.pageSize}&page=1`;
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -19,27 +21,30 @@ export class News extends Component {
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
+      loading:false
     });
   }
 
   handlePrevClick = async () => {
+    this.setState({loading:true})
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${
       this.props.apiKey
     }&pageSize=${this.props.pageSize}&page=${this.state.page - 1}`;
     let data = await fetch(url);
     let parsedData = await data.json();
 
-    this.setState({ page: this.state.page - 1, articles: parsedData.articles });
+    this.setState({ page: this.state.page - 1, articles: parsedData.articles,loading : false });
   };
 
   handleNextClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.props.apiKey}&pageSize=${
       this.props.pageSize
     }&page=${this.state.page + 1}`;
+    this.setState({loading:true})
     let data = await fetch(url);
     let parsedData = await data.json();
 
-    this.setState({ page: this.state.page + 1, articles: parsedData.articles });
+    this.setState({ page: this.state.page + 1, articles: parsedData.articles,loading : false});
   };
   render() {
     return (
@@ -47,8 +52,9 @@ export class News extends Component {
         <h1 className="text-center" style={{ fontFamily: "Times New Roman" }}>
           Fast News - Top Headlines
         </h1>
+        {this.state.loading?<Spinner/>:""}
         <div className="row">
-          {this.state.articles.map((element) => {
+          {!this.state.loading && this.state.articles.map((element) => {
             return (
               <div className="col-md-4" key={element.url}>
                 <NewsItem
