@@ -1,8 +1,21 @@
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
+import PropTypes from 'prop-types'
+
 
 export class News extends Component {
+
+  static defaultProps={
+    country: "in",
+    pageSize : 6,
+    category :"general"
+
+  }
+  static propTypes={
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+  }
   constructor() {
     super();
     this.state = {
@@ -14,7 +27,7 @@ export class News extends Component {
 
   async componentDidMount() {
     this.setState({loading:true})
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.props.apiKey}&pageSize=${this.props.pageSize}&page=1`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&pageSize=${this.props.pageSize}&page=1`;
     let data = await fetch(url);
     let parsedData = await data.json();
 
@@ -27,7 +40,7 @@ export class News extends Component {
 
   handlePrevClick = async () => {
     this.setState({loading:true})
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${
       this.props.apiKey
     }&pageSize=${this.props.pageSize}&page=${this.state.page - 1}`;
     let data = await fetch(url);
@@ -37,7 +50,7 @@ export class News extends Component {
   };
 
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${this.props.apiKey}&pageSize=${
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&pageSize=${
       this.props.pageSize
     }&page=${this.state.page + 1}`;
     this.setState({loading:true})
@@ -74,6 +87,12 @@ export class News extends Component {
                       ? element.description.slice(0, 88)
                       : element.description.slice(0, 88) + "..."
                   }
+                  author={element.author}
+                  publishedAt={new Date(element.publishedAt).toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
                 />
               </div>
             );
